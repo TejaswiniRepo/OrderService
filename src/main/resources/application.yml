@@ -1,0 +1,34 @@
+server:
+  port: 8080
+
+spring:
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/orderdb}
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      show-details: always
+
+service:
+  restaurant:
+    url: http://localhost:8080/mocks/restaurants
+  payment:
+    url: http://localhost:8080/mocks/payments
+  customer:
+    url: http://localhost:8080/mocks/customers
+  delivery:
+    url: http://localhost:8080/mocks/delivery
+
+logging:
+  level:
+    root: INFO
+    com.example.order: DEBUG
