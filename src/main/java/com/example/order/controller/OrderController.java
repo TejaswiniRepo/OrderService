@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -39,7 +40,18 @@ public class OrderController {
     public ResponseEntity<?> get(@PathVariable String id) {
         Optional<Order> o = orderService.getById(id);
         return o.map(ord -> ResponseEntity.ok(new OrderResponse(ord)))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("code","NOT_FOUND","message","order not found")));
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body((OrderResponse) Map.of("code","NOT_FOUND","message","order not found")));
+    }
+
+    @PutMapping("/{id}/status")
+    public Order updateOrder(@PathVariable String id, @RequestBody Order updatedOrder) {
+        return orderService.updateOrder(id, updatedOrder);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteOrder(@PathVariable String id) {
+        orderService.deleteOrder(id);
+        return "Order deleted successfully";
     }
 
     @GetMapping

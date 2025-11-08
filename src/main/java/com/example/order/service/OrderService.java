@@ -140,6 +140,24 @@ public class OrderService {
         return saved;
     }
 
+    public Order updateOrder(String id, Order updatedOrder) {
+        return orderRepository.findById(id).map(order -> {
+            order.setCustomerId(updatedOrder.getCustomerId());
+            order.setRestaurantId(updatedOrder.getRestaurantId());
+            order.setAddressId(updatedOrder.getAddressId());
+            order.setItems(updatedOrder.getItems());
+            order.setOrderStatus(updatedOrder.getOrderStatus());
+            return orderRepository.save(order);
+        }).orElseThrow(() -> new RuntimeException("Order not found with id " + id));
+    }
+
+    public void deleteOrder(String id) {
+        if (!orderRepository.existsById(id)) {
+            throw new RuntimeException("Order not found with id " + id);
+        }
+        orderRepository.deleteById(id);
+    }
+
     public Optional<Order> getById(String id) {
         return orderRepository.findById(id);
     }
